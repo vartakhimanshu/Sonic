@@ -43,7 +43,7 @@ int main() {
 	// which is the index of the audio object. If you want a reference to the
 	// audio object, use the world's getAudioObj(int index) method. Below, we do
 	// all of this in one line of code. I hope it's not too confusing.
-	float objPos[3] = {1, 1, 1};
+	float objPos[3] = {1, 0, 0};
 	AudioObj *obj1 = world.getAudioObj(world.addAudioObj(objPos));
 
 	//Let's print the object's coordinates!
