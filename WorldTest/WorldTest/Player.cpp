@@ -86,12 +86,12 @@ float Player::getAzimuth(AudioObj * obj) {
 
 // DOES NOT WORK WITH HEAD TRACKING
 float Player::getLeftAzimuth(AudioObj * obj) {
-	return fmod(getAzimuth(obj) + 90, 360);
+	return fmod(getAzimuth(obj) + 270, 360);
 }
 
 // DOES NOT WORK WITH HEAD TRACKING
 float Player::getRightAzimuth(AudioObj * obj) {
-	return fmod(getAzimuth(obj) + 270, 360);
+	return fmod(getAzimuth(obj) + 90, 360);
 }
 
 // DOES NOT WORK WITH HEAD TRACKING
