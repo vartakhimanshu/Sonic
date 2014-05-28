@@ -26,19 +26,19 @@ float * World::getPlayerLocation() {
 
 int World::addAudioObj() {
 	AudioObj obj;
-	objList.push_back(obj);
+	objList.push_back(new AudioObj());
 	numObj++;
 	return numObj-1;
 }
 
 int World::addAudioObj(float loc[]) {
 	AudioObj obj(loc);
-	objList.push_back(obj);
+	objList.push_back(new AudioObj(loc));
 	numObj++;
 	return numObj-1;
 }
 
-AudioObj & World::getAudioObj(int index) {
-	AudioObj &atObj = objList.at(index);
+AudioObj * World::getAudioObj(int index) {
+	AudioObj *atObj = objList.at(index);
 	return atObj;
 }

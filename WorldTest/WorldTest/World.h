@@ -9,7 +9,7 @@
 class World {
 
 	Player player;
-	std::vector<AudioObj> objList;
+	std::vector<AudioObj *> objList;
 	int numObj;
 
   public:
@@ -41,7 +41,7 @@ class World {
 
 	//Returns a reference to the audio object at the
 	// specified index.
-	AudioObj& getAudioObj(int index);
+	AudioObj * getAudioObj(int index);
 };
 
 #endif
