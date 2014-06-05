@@ -34,6 +34,12 @@ void Player::setLocation(float loc[]) {
 	location[2] = loc[2];
 }
 
+void Player::setLocation(float x, float y, float z) {
+	location[0] = x;
+	location[1] = y;
+	location[2] = z;
+}
+
 float Player::getBearing() {
 	return bearing;
 }
@@ -81,7 +87,7 @@ float Player::getAzimuth(AudioObj * obj) {
 		else if (dz < 0 && dx > 0)
 			angle = 360 + angle;
 	}
-	return fmod(angle - bearing + 90,360);
+	return fmod(angle - bearing + 450,360);
 }
 
 // DOES NOT WORK WITH HEAD TRACKING
@@ -101,4 +107,12 @@ float * Player::getOrientation(AudioObj * obj) {
 	orientation[1] = getZenith(obj);
 	orientation[2] = getAzimuth(obj);
 	return orientation;
+}
+
+float Player::getRelativeVolume(AudioObj * obj) {
+	float volume = obj->getVolume() * (1.0 / pow(getRadius(obj), 2));
+	if (volume < obj->getVolume())
+		return volume;
+	else
+		return obj->getVolume();
 }

@@ -32,6 +32,7 @@ class Player {
 	//Changes the player's location to that which
 	// is specifies in the parameter.
 	void setLocation(float loc[]);
+	void setLocation(float x, float y, float z);
 
 	//Returns thr player's bearing in degrees
 	float getBearing();
@@ -79,6 +80,9 @@ class Player {
 	// azimuth angle in the order.
 	// DOES NOT WORK WITH HEAD TRACKING
 	float * getOrientation(AudioObj * obj);
+
+	//
+	float getRelativeVolume(AudioObj * obj);
 };
 
 #endif
