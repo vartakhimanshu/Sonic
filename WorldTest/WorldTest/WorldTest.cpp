@@ -23,9 +23,6 @@ int main() {
 
 	//The player's getLocation() method returns an array of three floats that
 	// specify its location on the x, y, and z axes.
-	std::cout << "  Player coordinates: " << player->getLocation()[0]
-		<< ',' << player->getLocation()[1] << ',' << player->getLocation()[2] << '\n';
-	
 
 	//In addition to a location, the player also has a bearing. The bearing is
 	// what direction the player is facing. We'll set the player's bearing to
@@ -34,7 +31,6 @@ int main() {
 	// that.
 	float bear = 90;
 	player->setBearing(bear);
-	std::cout << "\n      Player bearing: " << player->getBearing() << '\n';
 
 	//Now we can start putting audio objects in the world. To do that, use the
 	// world'd addAudioObject() method. In the case of no arguments, the object
@@ -45,75 +41,72 @@ int main() {
 	// all of this in one line of code. I hope it's not too confusing.
 	float objPos[3] = {0, 0, 0};
 	AudioObj *obj1 = world.getAudioObj(world.addAudioObj(objPos));
+	obj1->setVolume(.5);
 
-	//Let's print the object's coordinates!
-	std::cout << "\nObject 1 coordinates: " << obj1->getLocation()[0] 
-		<< ',' << obj1->getLocation()[1] << ',' << obj1->getLocation()[2];
-	
+	float objPos2[3] = {0, 0, 5};
+	AudioObj *obj2 = world.getAudioObj(world.addAudioObj(objPos2));
+
 	//Now that we have a player and an audio object, we can calculate information
 	// about an object's position in relation to the player. The 
 	// getOrientation(AudioObj obj) method will give us three important pieces of
 	// information. It will return a float array containing the radius, zenith, and
 	// azimuth values. If that made no sense to you, refer to the methods' 
 	// documentation in "player.h".
-	std::cout << "\n              Radius: " << player->getOrientation(obj1)[0];
-	std::cout << "\n              Zenith: " << player->getOrientation(obj1)[1];
-	std::cout << "\n             Azimuth: " << player->getOrientation(obj1)[2];
-
-	//Here we do all of that again with a second object.
-	float objPos2[3] = {0, 0, 5};
-	AudioObj *obj2 = world.getAudioObj(world.addAudioObj(objPos2));
-	std::cout << "\n\nObject 2 coordinates: " << obj2->getLocation()[0]
-		<< ',' << obj2->getLocation()[1] << ',' << obj2->getLocation()[2];
-
-	std::cout << "\n              Radius: " << player->getOrientation(obj2)[0];
-	std::cout << "\n              Zenith: " << player->getOrientation(obj2)[1];
-	std::cout << "\n             Azimuth: " << player->getOrientation(obj2)[2];
-
 	char input;
-	std::cout << "\n\n--";
 	do {
-		std::cout << "\n\nDirection? 1 = x++; 2 = z++; 3 = x--; 4 = z--; 5 = LT; 6 = RT; 0 = Exit\n>> ";
+		world.updateActiveObjects();
+
+		std::cout << 
+			"\n  Player coordinates: " << player->getLocation()[0] << ',' 
+				<< player->getLocation()[1] << ',' << player->getLocation()[2] << 
+			"\n      Player bearing: " << player->getBearing() << 
+			"\n\nObject 1 coordinates: " << obj1->getLocation()[0] << ',' 
+				<< obj1->getLocation()[0] << ',' << obj1->getLocation()[0] << 
+			"\nObject 1 orientation: " << player->getOrientation(obj1)[0] << ',' 
+				<< player->getOrientation(obj1)[1] << ',' << player->getOrientation(obj1)[2] << 
+			"\n     Object 1 volume: " << obj1->getVolume() << 
+			"\n     Relative volume: " << player->getRelativeVolume(obj1) << 
+			"\n              Active: " << obj1->isActive() <<
+			"\n\nObject 2 coordinates: " << obj2->getLocation()[0] << ',' 
+				<<obj2->getLocation()[1] << ',' << obj2->getLocation()[2] << 
+			"\nObject 2 orientation: " << player->getOrientation(obj2)[0] << ',' 
+				<< player->getOrientation(obj2)[1] << ',' << player->getOrientation(obj2)[2] <<
+			"\n     Object 2 volume: " << obj2->getVolume() << 
+			"\n     Relative volume: " << player->getRelativeVolume(obj2) <<
+			"\n              Active: " << obj2->isActive() <<
+			"\n\n";
+
+		std::cout << "Let's move. 1 = x++; 2 = z++; 3 = x--; 4 = z--; 5 = LT; 6 = RT; 0 = Exit\n>> ";
 		std::cin >> input;
 		if (input == '1' || input == '2' || input == '3' || input == '4' || input == '5' || input == '6') {
 			switch(input) {
-			case '1':
-				player->setLocation(player->getLocation()[0] + 1, player->getLocation()[1], player->getLocation()[2]);
-				break;
-			case '2':
-				player->setLocation(player->getLocation()[0], player->getLocation()[1], player->getLocation()[2] + 1);
-				break;
-			case '3':
-				player->setLocation(player->getLocation()[0] - 1, player->getLocation()[1], player->getLocation()[2]);
-				break;
-			case '4':
-				player->setLocation(player->getLocation()[0], player->getLocation()[1], player->getLocation()[2] - 1);
-				break;
-			case '5':
-				player->setBearing(fmod(player->getBearing() + 90, 360));
-				break;
-			case '6':
-				player->setBearing(fmod(player->getBearing() + 270, 360));
-				break;
+				case '1':
+					player->setLocation(player->getLocation()[0] + 1, player->getLocation()[1], player->getLocation()[2]);
+					break;
+				case '2':
+					player->setLocation(player->getLocation()[0], player->getLocation()[1], player->getLocation()[2] + 1);
+					break;
+				case '3':
+					player->setLocation(player->getLocation()[0] - 1, player->getLocation()[1], player->getLocation()[2]);
+					break;
+				case '4':
+					player->setLocation(player->getLocation()[0], player->getLocation()[1], player->getLocation()[2] - 1);
+					break;
+				case '5':
+					player->setBearing(fmod(player->getBearing() + 90, 360));
+					break;
+				case '6':
+					player->setBearing(fmod(player->getBearing() + 270, 360));
+					break;
 			default:
 				break;
 			}
-			std::cout << "\n  Player coordinates: " << player->getLocation()[0] << ',' << player->getLocation()[1] << ',' << player->getLocation()[2] << 
-				"\n      Player bearing: " << player->getBearing() << 
-				"\n\nObject 1 coordinates: " << obj1->getLocation()[0] << ',' <<obj1->getLocation()[0] << ',' << obj1->getLocation()[0] << 
-				"\nObject 1 orientation: " << player->getOrientation(obj1)[0] << ',' << player->getOrientation(obj1)[1] << ',' << player->getOrientation(obj1)[2] << 
-				"\n     Object 1 volume: " << obj1->getVolume() << 
-				"\n     Relative volume: " << player->getRelativeVolume(obj1) << 
-				"\n\nObject 2 coordinates: " << obj2->getLocation()[0] << ',' <<obj2->getLocation()[0] << ',' << obj2->getLocation()[0] << 
-				"\nObject 2 orientation: " << player->getOrientation(obj2)[0] << ',' << player->getOrientation(obj2)[1] << ',' << player->getOrientation(obj2)[2] <<
-				"\n     Object 2 volume: " << obj2->getVolume() << 
-				"\n     Relative volume: " << player->getRelativeVolume(obj2) <<
-				"\n\n";
+
 		} else if (input != '0') {
 			//Invalid input
 			std::cout << "Bad try. Give it another shot there, genius.\n";
 		}
-	} while(input != 0);
+	} while(input != '0');
 
 	std::cout << "\n\nI hope you had fun. Really I do. Really.";
 

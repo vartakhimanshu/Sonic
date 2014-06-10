@@ -7,6 +7,7 @@
 World::World() {
 	player = Player();
 	numObj = 0;
+	threshold = .05;
 }
 
 World::World(float loc[]) {
@@ -14,6 +15,16 @@ World::World(float loc[]) {
 	float initLoc[] = {loc[0],loc[1],loc[2]};
 	numObj = 0;
 	player.setLocation(initLoc);
+	threshold = .05;
+}
+
+World::World(float loc[], float bear) {
+	player = Player(loc);
+	float initLoc[] = {loc[0],loc[1],loc[2]};
+	numObj = 0;
+	player.setLocation(initLoc);
+	player.setBearing(bear);
+	threshold = .05;
 }
 
 Player * World::getPlayer() {
@@ -41,4 +52,13 @@ int World::addAudioObj(float loc[]) {
 AudioObj * World::getAudioObj(int index) {
 	AudioObj *atObj = objList.at(index);
 	return atObj;
+}
+
+void World::updateActiveObjects() {
+	for (int i = 0; i < numObj; i++) {
+		if (getPlayer()->getRelativeVolume(getAudioObj(i)) <= threshold)
+			getAudioObj(i)->setActive(false);
+		else
+			getAudioObj(i)->setActive(true);
+	}
 }

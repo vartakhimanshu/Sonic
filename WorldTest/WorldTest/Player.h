@@ -1,7 +1,8 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-// math.h works in radians, we want degrees. Multiply a radian value by this number (180/pi) to calculate the degree value.
+//math.h works in radians; we want degrees. Multiply a radian 
+// value by this number (180/pi) to calculate the degree value.
 #define R2D 57.2957795131
 
 #include "AudioObj.h"
@@ -81,7 +82,9 @@ class Player {
 	// DOES NOT WORK WITH HEAD TRACKING
 	float * getOrientation(AudioObj * obj);
 
-	//
+	//Returns a float between 0 and 1 that describes how loud
+	// the object is in relation to the player. This is 
+	// calculated using the inverse square law. Math.
 	float getRelativeVolume(AudioObj * obj);
 };
 

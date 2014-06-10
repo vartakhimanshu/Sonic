@@ -11,6 +11,7 @@ class World {
 	Player player;
 	std::vector<AudioObj *> objList;
 	int numObj;
+	float threshold;
 
   public:
 
@@ -21,6 +22,12 @@ class World {
 	//This constructor creates a player at the
 	// location specified by the parameter.
 	World::World(float loc[]);
+
+	//This constructor creates a player at the
+	// location specified by the first parameter,
+	// and sets the player's bearing specified by
+	// the second parameter.
+	World::World(float loc[], float bear);
 
 	//Returns a reference to the player.
 	Player * getPlayer();
@@ -42,6 +49,8 @@ class World {
 	//Returns a reference to the audio object at the
 	// specified index.
 	AudioObj * getAudioObj(int index);
+
+	void updateActiveObjects();
 };
 
 #endif
