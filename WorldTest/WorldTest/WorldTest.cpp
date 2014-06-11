@@ -21,7 +21,7 @@ int main() {
 	float playerPos2[3] = {0, 0, 0};
 	player->setLocation(playerPos2);
 
-	//The player's getLocation() method returns an array of three floats that
+	//The player's getLocation() method will return an array of three floats that
 	// specify its location on the x, y, and z axes.
 
 	//In addition to a location, the player also has a bearing. The bearing is
@@ -33,7 +33,7 @@ int main() {
 	player->setBearing(bear);
 
 	//Now we can start putting audio objects in the world. To do that, use the
-	// world'd addAudioObject() method. In the case of no arguments, the object
+	// world's addAudioObject() method. In the case of no arguments, the object
 	// will be placed at {0,0,0}. But in this case, we give the method a set of
 	// coordinates at which to place the object. The method returns an int, 
 	// which is the index of the audio object. If you want a reference to the
@@ -46,16 +46,25 @@ int main() {
 	float objPos2[3] = {0, 0, 5};
 	AudioObj *obj2 = world.getAudioObj(world.addAudioObj(objPos2));
 
-	//Now that we have a player and an audio object, we can calculate information
+	//Now that we have a player and audio objects, we can calculate information
 	// about an object's position in relation to the player. The 
 	// getOrientation(AudioObj obj) method will give us three important pieces of
 	// information. It will return a float array containing the radius, zenith, and
 	// azimuth values. If that made no sense to you, refer to the methods' 
 	// documentation in "player.h".
+
+	//Below is a loop that will prompt the user for an input, allowing the user to
+	// move the player around. This way, we can see the numbers change.
 	char input;
 	do {
+		//This is important. The world's updateActiveObjects() method parses through
+		// all of the audio objects, and updates whether or not the object is active
+		// based upon the object's relative volume to the player. This needs to be
+		// done EVERY UPDATE. If you forget to call this method, an audio object that
+		// used to be out of range, but is now in range, will not be processed.
 		world.updateActiveObjects();
 
+		//This prints all of the important information that we're interested in.
 		std::cout << 
 			"\n  Player coordinates: " << player->getLocation()[0] << ',' 
 				<< player->getLocation()[1] << ',' << player->getLocation()[2] << 
@@ -76,6 +85,7 @@ int main() {
 			"\n              Active: " << obj2->isActive() <<
 			"\n\n";
 
+		//Text-based adventure style prompting.
 		std::cout << "Let's move. 1 = x++; 2 = z++; 3 = x--; 4 = z--; 5 = LT; 6 = RT; 0 = Exit\n>> ";
 		std::cin >> input;
 		if (input == '1' || input == '2' || input == '3' || input == '4' || input == '5' || input == '6') {
@@ -103,12 +113,12 @@ int main() {
 			}
 
 		} else if (input != '0') {
-			//Invalid input
+			//A good program generates a healthy animosity between it and its user.
 			std::cout << "Bad try. Give it another shot there, genius.\n";
 		}
 	} while(input != '0');
 
-	std::cout << "\n\nI hope you had fun. Really I do. Really.";
+	std::cout << "\n\nI hope you had fun. Really I do.";
 
 	//This makes the program not terminate until a keystroke.
 	std::cin.ignore();

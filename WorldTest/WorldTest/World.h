@@ -50,6 +50,8 @@ class World {
 	// specified index.
 	AudioObj * getAudioObj(int index);
 
+	//Updates each of the audio object's "active" value, based
+	// on the object's relative volume.
 	void updateActiveObjects();
 };
 
