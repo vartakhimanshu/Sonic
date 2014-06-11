@@ -79,7 +79,7 @@ int World::getNumActiveObjects() {
 }
 
 AudioObj ** World::getActiveObjects() {
-	AudioObj ** activeObjects = new AudioObj*[getNumActiveObjects()];
+	AudioObj ** activeObjects = new AudioObj*[MAX_OBJ];
 	int j = 0;
 
 	for(int i = 0; i < numObj; i++) {

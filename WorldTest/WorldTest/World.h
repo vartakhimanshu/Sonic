@@ -8,13 +8,15 @@
 
 class World {
 
+  private:
+
 	Player player;
 	std::vector<AudioObj *> objList;
 	int numObj;
 	float threshold;
 
   public:
-
+	static const int MAX_OBJ = 20;
 	//This default contrustor creates a player at
 	// the world's origin, {0,0,0}.
 	World::World();
