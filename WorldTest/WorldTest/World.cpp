@@ -27,6 +27,10 @@ World::World(float loc[], float bear) {
 	threshold = .05;
 }
 
+World * World::getWorld() {
+	return this;
+}
+
 Player * World::getPlayer() {
 	return &player;
 }
@@ -61,4 +65,29 @@ void World::updateActiveObjects() {
 		else
 			getAudioObj(i)->setActive(true);
 	}
+}
+
+int World::getNumActiveObjects() {
+	int n = 0;
+	
+	for(int i = 0; i < numObj; i++) {
+		if (getAudioObj(i)->isActive())
+			n++;
+	}
+
+	return n;
+}
+
+AudioObj ** World::getActiveObjects() {
+	AudioObj ** activeObjects = new AudioObj*[getNumActiveObjects()];
+	int j = 0;
+
+	for(int i = 0; i < numObj; i++) {
+		if (getAudioObj(i)->isActive()) {
+			activeObjects[j] = getAudioObj(i);
+			j++;
+		}
+	}
+
+	return activeObjects;
 }

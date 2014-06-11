@@ -29,6 +29,8 @@ class World {
 	// the second parameter.
 	World::World(float loc[], float bear);
 
+	World * getWorld();
+
 	//Returns a reference to the player.
 	Player * getPlayer();
 
@@ -53,6 +55,10 @@ class World {
 	//Updates each of the audio object's "active" value, based
 	// on the object's relative volume.
 	void updateActiveObjects();
+
+	int getNumActiveObjects();
+
+	AudioObj ** getActiveObjects();
 };
 
 #endif

@@ -56,6 +56,7 @@ int main() {
 	//Below is a loop that will prompt the user for an input, allowing the user to
 	// move the player around. This way, we can see the numbers change.
 	char input;
+	std::vector<AudioObj *> activeObjList;
 	do {
 		//This is important. The world's updateActiveObjects() method parses through
 		// all of the audio objects, and updates whether or not the object is active
@@ -84,6 +85,11 @@ int main() {
 			"\n     Relative volume: " << player->getRelativeVolume(obj2) <<
 			"\n              Active: " << obj2->isActive() <<
 			"\n\n";
+
+		for (int j = 0; j < world.getNumActiveObjects(); j++) {
+			std::cout << world.getActiveObjects()[j]->getLocation()[2] << " ";
+		}
+			std::cout << "\n\n";
 
 		//Text-based adventure style prompting.
 		std::cout << "Let's move. 1 = x++; 2 = z++; 3 = x--; 4 = z--; 5 = LT; 6 = RT; 0 = Exit\n>> ";

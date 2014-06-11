@@ -17,7 +17,7 @@ class AudioObj {
 	//Creates a new audio object at the location
 	// specified by the parameter.
 	AudioObj::AudioObj(float loc[]);
-
+	
 	//Returns the array of the object's location.
 	float* getLocation();
 
