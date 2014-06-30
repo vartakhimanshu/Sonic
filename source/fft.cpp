@@ -13,8 +13,8 @@
 using namespace std;
 
 //Convolution function which returns the frequency representation of the result.
-//NFFT is the FFT size, NSIG is the size for the input, NFIL is the size of the filter.
-complex* CFFT::convolutionF(const complex *input,const complex *filter, long NSIG, long NFIL, long &NFFT)
+//NFFT is the FFT size, nSIG is the size for the input, NFIL is the size of the filter.
+complex* CFFT::convolutionF(const complex *input,const complex *filter, long nSIG, long NFIL, long &NFFT)
 {
 	//Check for invalid inputs.
 	if(input == NULL || filter == NULL)
@@ -25,9 +25,9 @@ complex* CFFT::convolutionF(const complex *input,const complex *filter, long NSI
 
 	bool NFFTChanged = false;
 	//If NFFT not a power of 2, or it is smaller than signal or filter, prompt for new.
-	while (log(NFFT) / log(2) != (int)(log(NFFT) / log(2)) || NFFT < NSIG || NFFT < NFIL)
+	while (log(NFFT) / log(2) != (int)(log(NFFT) / log(2)) || NFFT < nSIG || NFFT < NFIL)
 	{
-		cout << "Please input a valid NFFT, which is >= NSIG(" << NSIG << ") and >= NFIL(" << NFIL <<") : ";
+		cout << "Please input a valid NFFT, which is >= nSIG(" << nSIG << ") and >= NFIL(" << NFIL <<") : ";
 		cin >> NFFT;
 		NFFTChanged = true;
 	}
@@ -36,7 +36,7 @@ complex* CFFT::convolutionF(const complex *input,const complex *filter, long NSI
 	complex *fInput, *fFilter;
 
 	fInput = new complex[NFFT];
-	for(int i = 0; i < NSIG; i++)
+	for(int i = 0; i < nSIG; i++)
 		fInput[i] = input[i];
 
 	fFilter = new complex[NFFT];
@@ -57,11 +57,11 @@ complex* CFFT::convolutionF(const complex *input,const complex *filter, long NSI
 }
 
 //Convolution function which returns the time representation of the result.
-//NFFT is the FFT size, NSIG is the size for the input, NFIL is the size of the filter.
-complex* CFFT::convolutionT(const complex *input,const complex *filter, long NSIG, long NFIL, long &NFFT)
+//NFFT is the FFT size, nSIG is the size for the input, NFIL is the size of the filter.
+complex* CFFT::convolutionT(const complex *input,const complex *filter, long nSIG, long NFIL, long &NFFT)
 {
 	//Store the output data.
-	complex *output = convolutionF(input, filter, NSIG, NFIL, NFFT);
+	complex *output = convolutionF(input, filter, nSIG, NFIL, NFFT);
 	
 	//Perform IFFT on the ouput.
 	CFFT::Inverse(output, NFFT);
@@ -69,23 +69,23 @@ complex* CFFT::convolutionT(const complex *input,const complex *filter, long NSI
 	return output;
 }
 
-complex* CFFT::stereoConvMonoInputF(const complex *input,const complex *filterLeft,const complex *filterRight, long NSIG, long NFILL, long NFILR, long &NFFT)
+complex* CFFT::stereoConvMonoInputF(const complex *input,const complex *filterLeft,const complex *filterRight, long nSIG, long NFILL, long NFILR, long &NFFT)
 {
-	complex *result = stereoConvMonoInputT(input, filterLeft, filterRight, NSIG, NFILL, NFILR, NFFT);
+	complex *result = stereoConvMonoInputT(input, filterLeft, filterRight, nSIG, NFILL, NFILR, NFFT);
 	CFFT::Forward(result, NFFT);
 	return result;
 }
 
 //The size of the ouput will be 2 times of the size of FFT for the input signal and the NFFT value
 //will be doubled after running the function
-complex* CFFT::stereoConvMonoInputT(const complex *input,const complex *filterLeft,const complex *filterRight, long NSIG, long NFILL, long NFilR, long &NFFT)
+complex* CFFT::stereoConvMonoInputT(const complex *input,const complex *filterLeft,const complex *filterRight, long nSIG, long NFILL, long NFilR, long &NFFT)
 {
 	complex *tempLeft = new complex[NFFT];
 	complex *tempRight = new complex[NFFT];
 	complex *result = new complex[2*NFFT];
 	
-	tempLeft = CFFT::convolutionT(input, filterLeft, NSIG, NFILL, NFFT);
-	tempRight = CFFT::convolutionT(input, filterRight, NSIG, NFILL, NFFT);
+	tempLeft = CFFT::convolutionT(input, filterLeft, nSIG, NFILL, NFFT);
+	tempRight = CFFT::convolutionT(input, filterRight, nSIG, NFILL, NFFT);
 	NFFT = NFFT * 2;
 	for (int i = 0; i < NFFT / 2; i++)
 	{
@@ -100,7 +100,7 @@ complex* CFFT::stereoConvMonoInputT(const complex *input,const complex *filterLe
 }
 
 /*
-complex* CFFT::stereoConvStereoInputT(const complex *input, const complex *filterLeft, const complex *filterRight, long NSIG, long NFILL, long NFILR, long &NFFT)
+complex* CFFT::stereoConvStereoInputT(const complex *input, const complex *filterLeft, const complex *filterRight, long nSIG, long NFILL, long NFILR, long &NFFT)
 {
 	NFFT = NFFT / 2;
 	complex *leftTemp = new complex[NFFT];

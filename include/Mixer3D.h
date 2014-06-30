@@ -1,10 +1,6 @@
-#include<iostream>
-
-using namespace std;
-
-#include "fft.h"
 #include "complex.h"
 #include "AudioObj.h"
+
 #include "World.h"
 #include "mit_hrtf_lib.h"
 
@@ -18,7 +14,7 @@ using namespace std;
 class Mixer3D
 {
 public:
-	Mixer3D(int bufSize, int smpRate, int bitD, World *w);
+	Mixer3D(int bufSize, int smpRate, int bitD, World<float, float> *w);
 
 	void mix(short *ioDataLeft, short *ioDataRight);//doing everything but now just used for every progress.
 	int HRTFLoading(int* pAzimuth, int* pElevation, unsigned int samplerate, unsigned int diffused, complex *&leftFilter, complex *&rightFilter);//loading filters according to the azimuth and elevation values
@@ -29,53 +25,25 @@ public:
 	template <typename SampleType>
 	void writeWAVData(const char* outFile, SampleType* buf, size_t bufSize, int sampleRate, short channels);
 
-	void convolution(complex *input, complex *filter, complex *output, long nSig, long nFil, long nFFT);
-	void stereoConvolution(complex *input, complex *leftFilter, complex *rightFilter, complex *leftOutput, complex *rightOutput, long nSig, long nFil, long nFFT);
-	void mixDown();//scaling down the totaly volume according the number of objects
-	void overlapConvolution(complex * input, int Azimuth, int elevation);
-	void stereoTest();
-
+	void convolution(complex *input, complex *filter, complex *output, long nSIG, long NFIL, long &NFFT);
+	void stereoConvolution(complex *input, complex *leftFilter, complex *rightFilter, complex *leftOutput, complex *rightOutput, long nSIG, long NFIL, long &NFFT);
+	void mixDown();
+	void convoluionAll(); 
 	complex *getLeftFilter();
-	short *getTemp()//used to achieve whatever field
+	short *getTemp()
 	{
-		return cbResult;
-	}
-	void test()
-	{
-		for (int i = 0; i < bufferSize; i++)
-		{
-			inputTemp[0][i] = input[0][begin[0] + i];
-		}
-		CFFT::Forward(inputTemp[0],  bufferSize);
-		CFFT::Inverse(inputTemp[0],  bufferSize);
-		cout << endl;
+		return cbResultLeft;
 	}
 
 private:
-	//It is named 
-	World *myWorld;
-	
-	//clFil stands for complex type left filter, left and right means the left and right channel
-	complex **input, **outputLeft, **outputRight, *result, *clFil, *crFil;
-	
-	complex **inputTemp;//store the data which is being processed currently
-	complex	*inputTempTemp;//just define it temporarily to store a small chunk of the input for processing
-	
-	//overlap stores the data chunk which needs to add up with the next chunk of data
-	//to fix the glitch problem
-	complex **overlapLeft,**overlapRight;
+	template <class T, class N>
+    World<T, N>* myWorld;
+	complex **ßinput,**inputTemp, **outputLeft,**outputRight,*result, *clFil, *crFil;
+	template <class R, class S>
+    AudioObj<R,S> **AOList;
+	short *lFil, *rFil, *cbResult,*cbResultLeft,*cbResultRight;
 
-	AudioObj **AOList;
-	short *lFil, *rFil;//left and right filter
-	short *cbResult, *cbResultLeft, *cbResultRight, *testOutput;
-
-	//store the output for small bufferSize
-	short *cbResultSmall;
-
-	//nTaps represents the size of the filter data, *begin and *end are the arrays 
-	//which store the beginning and ending point of the data which is read in every time. 
-	long bufferSize, sampleRate, bitDepth,nTaps,*begin,*end,dataSize;
-	
+	long bufferSize, sampleRate, bitDepth,nTaps,*begin,*end;//nTaps represents the size of the filter data, *begin and *end are the arrays which store the beginning and ending point of the data which is read in every time. 
 	int nObj;
 	void reassignWorld(World* w);
 };

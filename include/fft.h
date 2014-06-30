@@ -17,15 +17,15 @@ class CFFT
 {
 	public:
 		//Convolution functions
-		//NFFT is the FFT size (will be modified if invalid!), NSIG is the size for the input, NFIL is the size of the filter
+		//NFFT is the FFT size (will be modified if invalid!), nSIG is the size for the input, NFIL is the size of the filter
 		//Zero padding is automatically taken care of in the convolution function.
 		//T means the function returns result in time domain; F is the result in the frequency domain.
-		static complex* convolutionF(const complex *input,const complex *filter, long NSIG, long NFIL, long &NFFT);
-		static complex* convolutionT(const complex *input,const complex *filter, long NSIG, long NFIL, long &NFFT);
-		static complex* stereoConvMonoInputF(const complex *input, const complex *filterLeft, const complex *filterRight, long NSIG, long NFILL, long NFILR, long &NFFT);
-		static complex* stereoConvMonoInputT(const complex *input, const complex *filterLeft, const complex *filterRight, long NSIG,long NFILL, long NFILR, long &NFFT);
-		static complex* stereoConvStereoInputF(const complex *input, const complex *filterLeft, const complex *filterRight, long NSIG, long NFILL, long NFILR, long &NFFT);
-		static complex* stereoConvStereoInputT(const complex *input, const complex *filterLeft, const complex *filterRight, long NSIG, long NFILL, long NFILR, long &NFFT);
+		static complex* convolutionF(const complex *input,const complex *filter, long nSIG, long NFIL, long &NFFT);
+		static complex* convolutionT(const complex *input,const complex *filter, long nSIG, long NFIL, long &NFFT);
+		static complex* stereoConvMonoInputF(const complex *input, const complex *filterLeft, const complex *filterRight, long nSIG, long NFILL, long NFILR, long &NFFT);
+		static complex* stereoConvMonoInputT(const complex *input, const complex *filterLeft, const complex *filterRight, long nSIG,long NFILL, long NFILR, long &NFFT);
+		static complex* stereoConvStereoInputF(const complex *input, const complex *filterLeft, const complex *filterRight, long nSIG, long NFILL, long NFILR, long &NFFT);
+		static complex* stereoConvStereoInputT(const complex *input, const complex *filterLeft, const complex *filterRight, long nSIG, long NFILL, long NFILR, long &NFFT);
 		
 		
 		//storing the an array into a text file
@@ -42,7 +42,6 @@ class CFFT
 		//   FORWARD FOURIER TRANSFORM, INPLACE VERSION
 		//     Data - both input data and output
 		//     N    - length of input data
-		//	 It doesn't do zero padding automatically
 		static bool Forward(complex *const Data, const unsigned int N);
 	
 		//   INVERSE FOURIER TRANSFORM

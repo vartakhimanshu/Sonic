@@ -3,6 +3,7 @@
 
 #include <string>
 #include "complex.h"
+#include <math.h>
 
 #if defined(__cplusplus)
 extern "C" {
@@ -12,10 +13,15 @@ extern "C" {
 	namespace utility {
 
 		// Structs for components of a WAVE file
-		typedef struct RIFF_Header;
-		typedef struct WAVE_Format;
-		typedef struct WAVE_Data;
+		//typedef struct RIFF_Header;
+		//typedef struct WAVE_Format;
+		//typedef struct WAVE_Data;
 
+        struct RIFF_Header;
+        struct WAVE_Format;
+		struct WAVE_Data;
+
+        
 		// Load WAVE file function
 		complex *loadCmpWavData(const std::string fname, long *size, int *smpFreq, int *bitDepth, int *channels);
 	}

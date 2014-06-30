@@ -14,14 +14,14 @@
 
 
 #include "../include/mit_hrtf_lib.h"
-#include "normal/mit_hrtf_normal_44100.h"
-#include "diffuse/mit_hrtf_diffuse_44100.h"
-#include "normal/mit_hrtf_normal_48000.h"
-#include "diffuse/mit_hrtf_diffuse_48000.h"
-#include "normal/mit_hrtf_normal_88200.h"
-#include "diffuse/mit_hrtf_diffuse_88200.h"
-#include "normal/mit_hrtf_normal_96000.h"
-#include "diffuse/mit_hrtf_diffuse_96000.h"
+#include "../MIT_HRTF_Library/source/normal/mit_hrtf_normal_44100.h"
+#include "../MIT_HRTF_Library/source/diffuse/mit_hrtf_diffuse_44100.h"
+#include "../MIT_HRTF_Library/source/normal/mit_hrtf_normal_48000.h"
+#include "../MIT_HRTF_Library/source/diffuse/mit_hrtf_diffuse_48000.h"
+#include "../MIT_HRTF_Library/source/normal/mit_hrtf_normal_88200.h"
+#include "../MIT_HRTF_Library/source/diffuse/mit_hrtf_diffuse_88200.h"
+#include "../MIT_HRTF_Library/source/normal/mit_hrtf_normal_96000.h"
+#include "../MIT_HRTF_Library/source/diffuse/mit_hrtf_diffuse_96000.h"
 
 
 
