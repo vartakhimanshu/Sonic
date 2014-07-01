@@ -18,7 +18,7 @@ struct wavFileData
 	int channels;
 };
 
-Mixer3D::Mixer3D(int bufSize, int smpRate, int bitD, World *w)
+Mixer3D::Mixer3D(int bufSize, int smpRate, int bitD, Player *p, AudioObj<T, V> **AOList)
 {
 	myWorld = w;
 	bufferSize = bufSize;
@@ -162,7 +162,9 @@ void Mixer3D::stereoConvolution(complex *input, complex *leftFilter, complex *ri
 	convolution(input, rightFilter, rightOutput, nSIG, NFIL, NFFT);
 
 }
-void Mixer3D::mix(short *ioDataLeft,short *ioDataRight)
+
+template <class T, class V>
+void Mixer3D::mix(short *ioDataLeft, short *ioDataRight, Player<T, V> p, AudioObj< )
 {
 	
 		for (int i = 0; i < bufferSize; i++)
