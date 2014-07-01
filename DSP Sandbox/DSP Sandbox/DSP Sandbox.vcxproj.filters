@@ -24,9 +24,6 @@
     <ClCompile Include="..\..\MIT_HRTF_Library\source\mit_hrtf_lib.c">
       <Filter>Resource Files</Filter>
     </ClCompile>
-    <ClCompile Include="Test.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\source\AudioObj.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
@@ -42,5 +39,16 @@
     <ClCompile Include="..\..\source\World.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
+    <ClCompile Include="ConsoleApplication1.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="360stereo.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="data.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>
