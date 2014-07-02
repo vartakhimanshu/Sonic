@@ -19,11 +19,7 @@
     <ClCompile Include="..\..\source\Player.cpp" />
     <ClCompile Include="..\..\source\wav.cpp" />
     <ClCompile Include="..\..\source\World.cpp" />
-    <ClCompile Include="ConsoleApplication1.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="360stereo.txt" />
-    <Text Include="data.txt" />
+    <ClCompile Include="Test.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{A9332C95-2C46-4E7D-8A09-E05FEAE5E38A}</ProjectGuid>

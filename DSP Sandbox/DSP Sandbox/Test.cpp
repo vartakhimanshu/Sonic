@@ -165,27 +165,42 @@ struct wavFileData
 
 int main()
 {
-	string inFile = "assets\\input1mono.wav";
+	string inFile = "assets\\3Seconds.wav";
 	wavFileData inp;
 	//LOAD THE WAV FILES
 	cout << "Attempting to load wav files..." << endl << endl;
 	complex* temp = utility::loadCmpWavData(inFile, &inp.n, &inp.sampleRate, &inp.bitDepth, &inp.channels);
 	int sampleRate = inp.sampleRate;
-	int bufferSize = inp.n;
+	int bufferSize = 65536/128*16;
+	int dataSize = 65536;
 	int bitDepth = 16;
 	int diffuse = 1;
 	Player playerA = Player();
 	AudioObj AudioObjA = AudioObj();
 	World myWorld = World();
+	myWorld.addAudioObj();
 	Mixer3D myMixer = Mixer3D(bufferSize,sampleRate,bitDepth,&myWorld);
-
-	myMixer.mix();
-	temp = myMixer.getLeftFilter();
-	short *temp2;
-	temp2 = myMixer.getTemp();
-	string s = "output0e-45a.wav";
-	myMixer.writeWAVData(s.c_str(), temp2, bufferSize, inp.sampleRate, 2);
+	short* left = new short[dataSize], *right = new short[dataSize];
 	
+	//myMixer.mix(left,right);
+	//myMixer.test();
+	myMixer.stereoTest();
+	//temp = myMixer.getLeftFilter();
+	long *temp2;
+	temp2 = myMixer.getTemp();
+	short *temp3 = new short[4 * 72 * bufferSize];
+	for (int i = 0; i < 2 * 72 * bufferSize; i++)
+	{
+		temp3[i] = (short)temp2[i];
+		if (i<10000 && i>9000)
+			cout << temp3[i] <<"    "<<temp2[i]<< endl;
+	}
+
+
+	
+
+	string s = "360AzimuthStereo.wav";
+	myMixer.writeWAVData(s.c_str(), temp3, 4*72*bufferSize, inp.sampleRate, 2);
 
 	//testing
  	return 0;
