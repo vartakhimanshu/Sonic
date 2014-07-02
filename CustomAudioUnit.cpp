@@ -29,6 +29,8 @@ static OSStatus recordingCallback (void *inRefCon, AudioUnitRenderActionFlags *i
 }
 
 Mixer3D *mixer3D;
+World myWorld;
+
 
 static OSStatus playbackCallback (void *inRefCon, AudioUnitRenderActionFlags *ioActionFlags, const AudioTimeStamp *inTimeStamp, UInt32 inBusNumber, UInt32 inNumberFrames, AudioBufferList *ioData) {
     
@@ -50,11 +52,9 @@ static OSStatus playbackCallback (void *inRefCon, AudioUnitRenderActionFlags *io
 
 void CustomAudioUnit::init () {
 	
-	int bufferSize = 512;
-	int bitDepth = 16;
-	World myWorld;
 	myWorld.addAudioObj();
-    
+    int bufferSize = 512;
+    int bitDepth = 16;
     mixer3D = new Mixer3D(bufferSize, 44100, bitDepth, &myWorld);
     
     
@@ -129,7 +129,7 @@ void CustomAudioUnit::init () {
     AudioUnitInitialize(audioUnitInstance);
 
 }
-
+ 
 CustomAudioUnit::CustomAudioUnit() {
     init();
     std::cout<<"\nConstructor";

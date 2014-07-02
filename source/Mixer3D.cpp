@@ -18,7 +18,7 @@ struct wavFileData
 	int channels;
 };
 
-Mixer3D::Mixer3D(int bufSize, int smpRate, int bitD, Player *p, AudioObj<T, V> **AOList)
+Mixer3D::Mixer3D(int bufSize, int smpRate, int bitD, World *w)
 {
 	myWorld = w;
 	bufferSize = bufSize;
@@ -37,20 +37,20 @@ Mixer3D::Mixer3D(int bufSize, int smpRate, int bitD, Player *p, AudioObj<T, V> *
 	
 	for (int i = 0; i < World::MAX_OBJ; i++)
 	{
-		input[i] = new complex[100000];
+		//input[i] = new complex[100000];
 		inputTemp[i] = new complex[bufferSize];
 		outputLeft[i] = new complex[bufferSize];
 		outputRight[i] = new complex[bufferSize];
 	}
 
 	/////This part is just for testing
-	const string inFile = "input1mono.wav";
-	wavFileData inp;
+	//const string inFile = "input1mono.wav";
+	//wavFileData inp;
 	//LOAD THE WAV FILES
-	cout << "Attempting to load wav files..." << endl << endl;
-	input[0] = utility::loadCmpWavData(inFile, &inp.n, &inp.sampleRate, &inp.bitDepth, &inp.channels);
-    cout<<"\ninput[0] : "<< input[0];
-	cout << "\nWav files loading complete!" << endl;
+	//cout << "Attempting to load wav files..." << endl << endl;
+	//input[0] = utility::loadCmpWavData(inFile, &inp.n, &inp.sampleRate, &inp.bitDepth, &inp.channels);
+    //cout<<"\ninput[0] : "<< input[0];
+	//cout << "\nWav files loading complete!" << endl;
 	//////This part is just for testing
 
 	begin = new long[World::MAX_OBJ];
@@ -162,16 +162,15 @@ void Mixer3D::stereoConvolution(complex *input, complex *leftFilter, complex *ri
 	convolution(input, rightFilter, rightOutput, nSIG, NFIL, NFFT);
 
 }
-
-template <class T, class V>
-void Mixer3D::mix(short *ioDataLeft, short *ioDataRight, Player<T, V> p, AudioObj< )
+void Mixer3D::mix(short *ioDataLeft,short *ioDataRight)
 {
 	
-		for (int i = 0; i < bufferSize; i++)
-		{
-			inputTemp[0][i] = input[0][begin[0]+i];
-		}
-
+		//for (int i = 0; i < bufferSize; i++)
+		//{
+		//	inputTemp[0][i] = input[0][begin[0]+i];
+		//}
+    
+        myWorld->getAudioObj(0)->fillAudioData(inputTemp[0], bufferSize);
 		int Azimuth = 60;
 		int elevation = 0;
 		nTaps = HRTFLoading(&Azimuth, &elevation, sampleRate, 1, clFil, crFil);

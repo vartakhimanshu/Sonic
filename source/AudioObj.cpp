@@ -1,4 +1,5 @@
 #include "../include/AudioObj.h"
+//#include <iostream>
 
 Location AudioObj::getLocation () const {
     return this->location;
@@ -41,4 +42,38 @@ bool AudioObj::isActive() const {
 
 void AudioObj::setActive(bool active){
     this->active = active;
+}
+
+void AudioObj::loadWavFile() {
+	const string inFile = "input1mono.wav";
+	tempBufferWavFile = utility::loadCmpWavData(inFile, &(wavFileData.n), &(wavFileData.sampleRate), &(wavFileData.bitDepth), &(wavFileData.channels));
+    currentTrackerPosition =0;
+}
+
+void AudioObj::fillAudioData (complex* target, unsigned int length) {
+    if (currentTrackerPosition + length < wavFileData.n){
+        for (unsigned int i=0; i<length; i++){
+            target[i] = tempBufferWavFile[i+currentTrackerPosition];
+        }
+        currentTrackerPosition += length;
+    }else if (currentTrackerPosition < wavFileData.n) {
+        for (unsigned int i=0; i< wavFileData.n-currentTrackerPosition; i++){
+            target[i] = tempBufferWavFile[i+currentTrackerPosition];
+        }
+        for (unsigned int i=0; i< length - (wavFileData.n-currentTrackerPosition); i++){
+            target[i] = 0;
+        }
+        currentTrackerPosition += length;
+    }else {
+        if (repeat) {
+            currentTrackerPosition =0;
+            fillAudioData(target, length);
+            return;
+        }else {
+            for (unsigned int i=0; i<length; i++){
+                target[i] = 0;
+            }
+        }
+    }
+    
 }
