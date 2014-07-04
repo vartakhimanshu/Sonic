@@ -3,6 +3,8 @@
 
 #include <stdexcept>
 #include <vector>
+#include <pthread.h>
+#include <unistd.h>
 
 #include "location.h"
 #include "velocity.h"
@@ -14,15 +16,18 @@ using namespace std;
 class World {
 
 	Player player;
-	vector<AudioObj *> objList;
+    vector<AudioObj *> objList;
 	int numObj;
 	float threshold;
+    pthread_t writeThread;
+    
+    static void *writeAudioObjects (void *);
 
   public:
 	static const int MAX_OBJ = 20;
 	//This default contrustor creates a player at
 	// the world's origin, {0,0,0}.
-	World() : numObj(0), threshold(0.05) {}
+    World() : numObj(0), threshold(0.05) {pthread_create(&writeThread, nullptr, writeAudioObjects, &objList);}
 
 	//This constructor creates a player at the
 	// location specified by the first parameter,
@@ -51,5 +56,6 @@ class World {
 	// specified index.
 	AudioObj* getAudioObj(int index) const;
 };
+
 
 #endif

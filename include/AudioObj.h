@@ -6,6 +6,7 @@
 #include "velocity.h"
 #include "wav.h"
 #include "complex.h"
+#include "CircBuff.h"
 
 using namespace std;
 
@@ -27,14 +28,15 @@ class AudioObj {
     
     void loadWavFile (void);
     bool repeat;
+    CircBuff<complex> circBuff;
     
 public:
 
 	//Creates a new audio object at the world's origin, {0,0,0}.
-	AudioObj() : active(false), volume(1), repeat(true) {/*tempBufferWavFile = new complex[100000]; if(!tempBufferWavFile) throw bad_alloc ();*/ loadWavFile();}
+    AudioObj() : active(false), volume(1), repeat(true), circBuff(8192) {/*tempBufferWavFile = new complex[100000]; if(!tempBufferWavFile) throw bad_alloc ();*/ loadWavFile(); circBuff.write(tempBufferWavFile, 8192); }
 
 	//Creates a new audio object at the location specified by the parameter.
-	AudioObj(const Location& loc, const Velocity& vel) : location(loc), velocity(vel), active(false), volume(1), repeat(true) {/*tempBufferWavFile = new complex[100000]; if(!tempBufferWavFile) throw bad_alloc ();*/ loadWavFile();}
+    AudioObj(const Location& loc, const Velocity& vel) : location(loc), velocity(vel), active(false), volume(1), repeat(true), circBuff(8192) {/*tempBufferWavFile = new complex[100000]; if(!tempBufferWavFile) throw bad_alloc ();*/ loadWavFile();  circBuff.write(tempBufferWavFile, 10000);}
     
     ~AudioObj () { delete[] tempBufferWavFile;}
 	
@@ -64,6 +66,8 @@ public:
 	void setActive(bool active);
     
     void fillAudioData(complex *, unsigned int);
+    
+    void writeCircBuff (void);
     
 };
 

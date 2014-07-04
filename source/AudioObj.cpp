@@ -50,6 +50,7 @@ void AudioObj::loadWavFile() {
     currentTrackerPosition =0;
 }
 
+/*
 void AudioObj::fillAudioData (complex* target, unsigned int length) {
     if (currentTrackerPosition + length < wavFileData.n){
         for (unsigned int i=0; i<length; i++){
@@ -75,5 +76,17 @@ void AudioObj::fillAudioData (complex* target, unsigned int length) {
             }
         }
     }
-    
+}*/
+
+void AudioObj::fillAudioData (complex* target, unsigned int length) {
+    //cout<<"read size remaining, length"<<circBuff.readSizeRemaining()<<","<<length<<endl;
+    circBuff.read(target, length);
+}
+
+void AudioObj::writeCircBuff() {
+    unsigned int length = circBuff.writeSizeRemaining();
+    if(length)
+        cout<<"In write circ Buff : "<<length<<endl;
+    circBuff.write(tempBufferWavFile+currentTrackerPosition+8192, length);
+    currentTrackerPosition += length;
 }
