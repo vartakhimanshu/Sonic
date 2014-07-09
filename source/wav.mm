@@ -56,6 +56,7 @@ namespace utility
             NSString *docs_dir = [paths objectAtIndex:0];
             NSString* aFile = [docs_dir stringByAppendingPathComponent: @"input1mono.wav"];
             soundFile = fopen([aFile fileSystemRepresentation], "r");
+            std::cout<<[aFile fileSystemRepresentation]<<std::endl;
             
             //soundFile = fopen("/Users/philadelphiagamelab2/Deskop/Demo/Demo/InputData/input1mono.wav","r");
             //soundFile = fopen("~/test.txt","r");
@@ -115,12 +116,14 @@ namespace utility
 				
 				fread(&wave_data, sizeof(WAVE_Data), 1, soundFile);
 			}
-
+            //Vinay's comments: Here, we have to allocate how much ever memory we want.
 			// Allocate memory for wave data
+            //Vinay's comments: Here, we should use the fseek function most probablya
 			std::cout << "Extracting data from file..." << std::endl;
 			data = new unsigned char[wave_data.subChunk2Size];
 			std::cout << "Data extracted!" << std::endl;
-			
+            
+			//Vinay's comments: Here, the reading of wav file is taking place
 			// Read in sound data to soundData var
 			if (!fread(data, wave_data.subChunk2Size, 1, soundFile))
 				throw ("error loading WAVE data into struct");
@@ -152,7 +155,8 @@ namespace utility
 
 			// Clean up and return true if successful
 			fclose(soundFile);
-			return wavData;
+            delete[] data;
+            return wavData;
 		}
 
 		catch (std::string error) {

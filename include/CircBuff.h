@@ -34,8 +34,6 @@ protected:
     
     //pointer to circular buffer, start writing data from here
     T *_data;
-    size_t counter = 0;
-    size_t _readFramesCounter = 0;
     
 public:
        CircBuff(size_t capacity)
@@ -53,27 +51,30 @@ public:
     }
     
     //Define write audio data to circular buffer
-    size_t write(T *dataPtr, size_t bytes);
+    size_t write(T *dataPtr, size_t samples);
     size_t writeSizeRemaining();
     size_t readSizeRemaining();
     template <class V>
-    size_t read(V *dataPtr, size_t bytes);
+    size_t read(V *dataPtr, size_t samples);
 };
 
 template <class T>
-size_t CircBuff<T>::write(T *dataPtr, size_t bytes)
+size_t CircBuff<T>::write(T *dataPtr, size_t samples)
 {
     size_t capacity = _capacity;
-    size_t bytes_to_write = std::min(bytes, capacity-_size);
+    size_t samples_to_write = std::min(samples, capacity-_size);
+    //size_t samples_to_write = samples;
     
+    _size += samples_to_write;
     //writing to buffer
     
-    if (bytes_to_write <= capacity - _endIndex) {
-        //size_t num = sf_read_int(sf, _data + _endIndex, bytes_to_write);
-        for(int i = 0; i < bytes_to_write; i++) {
+    if (samples_to_write <= capacity - _endIndex) {
+        cout<<"normal in circBuffer"<<std::endl;
+        //size_t num = sf_read_int(sf, _data + _endIndex, samples_to_write);
+        for(int i = 0; i < samples_to_write; i++) {
             _data[_endIndex+i] = dataPtr[i];
         }
-        _endIndex += bytes_to_write;
+        _endIndex += samples_to_write;
         if (_endIndex == capacity) {
             _endIndex = 0;
         }
@@ -83,16 +84,15 @@ size_t CircBuff<T>::write(T *dataPtr, size_t bytes)
         for(int i = 0; i < size1; i++) {
             _data[_endIndex+i] = dataPtr[i];
         }
-        size_t size2 = bytes_to_write - size1;
+        size_t size2 = samples_to_write - size1;
         //size_t num2 = sf_read_int(sf, _data, size2);
         for(int i = 0; i < size2; i++) {
-            _data[i] = dataPtr[i];
+            _data[i] = dataPtr[i+size1];
         }
         _endIndex = size2;
     }
     
-    _size += bytes_to_write;
-    return bytes_to_write;
+    return samples_to_write;
 }
 
 template <class T>
@@ -108,26 +108,26 @@ size_t CircBuff<T>::readSizeRemaining()
 }
 
 template <class T> template <class V>
-size_t CircBuff<T>::read(V *dataPtr, size_t bytes)
+size_t CircBuff<T>::read(V *dataPtr, size_t samples)
 {
-    if (bytes == 0){
+    if (samples == 0){
         return 0;
     }
     size_t capacity = _capacity;
-    size_t bytes_to_read;
-    //size_t bytes_to_read = std::min(bytes, _size);
-    if (bytes >= _size){
-        bytes_to_read = _size;
+    size_t samples_to_read;
+    //size_t samples_to_read = std::min(samples, _size);
+    if (samples >= _size){
+        samples_to_read = _size;
     }else{
-        bytes_to_read = bytes;
+        samples_to_read = samples;
     }
     // Read in a single step
-    if (bytes_to_read <= capacity - _begIndex){
-        for(int i = 0; i < bytes_to_read; i++) {
+    if (samples_to_read <= capacity - _begIndex){
+        for(int i = 0; i < samples_to_read; i++) {
             dataPtr[i] = _data[_begIndex+i];
         }
         
-        _begIndex += bytes_to_read;
+        _begIndex += samples_to_read;
         if (_begIndex == capacity){
             _begIndex = 0;
         }
@@ -136,16 +136,16 @@ size_t CircBuff<T>::read(V *dataPtr, size_t bytes)
         for(int i = 0; i < size_1; i++) {
             dataPtr[i] = _data[_begIndex+i];
         }
-        size_t size_2 = bytes_to_read - size_1;
+        size_t size_2 = samples_to_read - size_1;
         
         for(int i = 0; i < size_2; i++) {
-            dataPtr[i] = _data[i];
+            dataPtr[i+size_1] = _data[i];
         }
         _begIndex = size_2;
     }
-    _size -= bytes_to_read;
+    _size -= samples_to_read;
     // std::cout << "Size after reading: " << _size << "\n";
-    return bytes_to_read;
+    return samples_to_read;
 }
 
 

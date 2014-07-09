@@ -52,7 +52,9 @@ static OSStatus playbackCallback (void *inRefCon, AudioUnitRenderActionFlags *io
 
 void CustomAudioUnit::init () {
 	
-	myWorld.addAudioObj();
+	//myWorld.addAudioObj("1minutetest.wav");
+    myWorld.addAudioObj("3m40stest.wav");
+    //myWorld.addAudioObj("input1mono.wav");
     int bufferSize = 512;
     int bitDepth = 16;
     mixer3D = new Mixer3D(bufferSize, 44100, bitDepth, &myWorld);
@@ -106,7 +108,16 @@ void CustomAudioUnit::init () {
     // kAudioFormatFlagsCanonical | kAudioFormatFlagIsNonInterleaved = kAudioFormatFlagsAudioUnitCanonical
     // If interleaved, mBytesPerFrame = no.ofChannels * bytesPerSample
     // If interleaved, there is only one buffer in AudioBufferList
-    stereoStreamFormat.mFormatFlags = kAudioFormatFlagsCanonical | kAudioFormatFlagIsNonInterleaved;
+        /*kAudioFormatFlagIsSignedInteger |
+         kAudioFormatFlagsNativeEndian |
+         kAudioFormatFlagIsPacked |
+         kAudioFormatFlagIsNonInterleaved |
+         (kAudioUnitSampleFractionBits <<
+         kLinearPCMFormatFlagsSampleFractionShift)*/
+    stereoStreamFormat.mFormatFlags = kAudioFormatFlagIsSignedInteger |
+    kAudioFormatFlagsNativeEndian |
+    kAudioFormatFlagIsPacked |
+    kAudioFormatFlagIsNonInterleaved;
     stereoStreamFormat.mFormatID = kAudioFormatLinearPCM;
     stereoStreamFormat.mFramesPerPacket = 1;
     stereoStreamFormat.mReserved = 0;
@@ -144,6 +155,7 @@ CustomAudioUnit::~CustomAudioUnit() {
 void CustomAudioUnit::play() {
     init();
     AudioOutputUnitStart(audioUnitInstance);
+    myWorld.createWriteThread();
     std::cout<<"\nPlay";
 }
 

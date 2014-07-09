@@ -8,14 +8,14 @@ Location World::getPlayerLocation() const{
     return this->player.getLocation();
 }
 
-int World::addAudioObj(){
-    objList.push_back(new AudioObj());
+int World::addAudioObj(const std::string wavFileName){
+    objList.push_back(new AudioObj(wavFileName));
 	numObj++;
 	return numObj-1;
 }
 
-int World::addAudioObj(const Location& loc, const Velocity& vel) {
-    objList.push_back(new AudioObj(loc,vel));
+int World::addAudioObj(const Location& loc, const Velocity& vel, const std::string wavFileName) {
+    objList.push_back(new AudioObj(loc,vel, wavFileName));
 	numObj++;
 	return numObj-1;
 }
@@ -28,10 +28,11 @@ void * World::writeAudioObjects (void* obj) {
     cout<<"in thread write audio objects" <<endl;
     vector<AudioObj *> *objListCurrent = static_cast<vector<AudioObj *>*>(obj);
     while (1){
-        usleep(10000);
-        if (objListCurrent->size() != 0) {
-            (*objListCurrent)[0]->writeCircBuff();
+        int size = objListCurrent->size();
+        for (int i=0; i < size ; i++){
+            (*objListCurrent)[i]->writeCircBuff();
         }
+        usleep(1000000);
     }
     return NULL;
 }

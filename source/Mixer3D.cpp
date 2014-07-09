@@ -171,6 +171,7 @@ void Mixer3D::mix(short *ioDataLeft,short *ioDataRight)
 		//}
     
         myWorld->getAudioObj(0)->fillAudioData(inputTemp[0], bufferSize);
+        //myWorld->getAudioObj(1)->fillAudioData(inputTemp[1], bufferSize);
 		int Azimuth = 60;
 		int elevation = 0;
 		nTaps = HRTFLoading(&Azimuth, &elevation, sampleRate, 1, clFil, crFil);
@@ -180,10 +181,16 @@ void Mixer3D::mix(short *ioDataLeft,short *ioDataRight)
 		{
 			//cbResult[2 * i] = outputLeft[0][i].re();
 			//cbResultLeft[i] = (short)outputLeft[0][i].re();
-			//ioDataLeft[i] = (short)outputLeft[0][i].re();
+			
+            //ioDataLeft[i] = (short)outputLeft[0][i].re();
 			//ioDataRight[i] = (short)outputRight[0][i].re();
-            ioDataLeft[i]  = pow(2,15) * inputTemp[0][i].re();
-            ioDataRight[i] = pow(2,15) * inputTemp[0][i].re();
+            
+            ioDataLeft[i]  = pow(2,15) * inputTemp[0][i].re() ;
+            ioDataRight[i] = pow(2,15) * inputTemp[0][i].re() ;
+    
+            //ioDataLeft[i]  = pow(2,15) * ((inputTemp[0][i].re() + inputTemp[1][i].re())/2);
+            //ioDataRight[i] = pow(2,15) * ((inputTemp[0][i].re() + inputTemp[1][i].re())/2);
+            
             //cbResult[2 * i + 1] = outputRight[0][i].re();
 			//cbResultRight[i] = (short)outputRight[0][i].re();
 		}

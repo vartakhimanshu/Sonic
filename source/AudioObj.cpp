@@ -44,11 +44,12 @@ void AudioObj::setActive(bool active){
     this->active = active;
 }
 
+/*
 void AudioObj::loadWavFile() {
 	const string inFile = "input1mono.wav";
 	tempBufferWavFile = utility::loadCmpWavData(inFile, &(wavFileData.n), &(wavFileData.sampleRate), &(wavFileData.bitDepth), &(wavFileData.channels));
     currentTrackerPosition =0;
-}
+}*/
 
 /*
 void AudioObj::fillAudioData (complex* target, unsigned int length) {
@@ -84,9 +85,14 @@ void AudioObj::fillAudioData (complex* target, unsigned int length) {
 }
 
 void AudioObj::writeCircBuff() {
+    
     unsigned int length = circBuff.writeSizeRemaining();
-    if(length)
+    if(length>16384) {
         cout<<"In write circ Buff : "<<length<<endl;
-    circBuff.write(tempBufferWavFile+currentTrackerPosition+8192, length);
-    currentTrackerPosition += length;
+        wavObject.loadMoreData(length);
+        circBuff.write(wavObject.complexTempData, length);
+    }
+    
+    //circBuff.write(tempBufferWavFile+currentTrackerPosition+8192, length);
+    //currentTrackerPosition += length;
 }

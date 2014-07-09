@@ -7,8 +7,10 @@
 #include "wav.h"
 #include "complex.h"
 #include "CircBuff.h"
+#include "WavObject.h"
 
 using namespace std;
+#define BUFFER_CAPACITY 65000 //This will be capacity of circular buffer and also size of memory allocated in wavObject
 
 class AudioObj {
 	
@@ -16,7 +18,12 @@ class AudioObj {
     Velocity velocity;
     bool active;
     float volume;
-    complex* tempBufferWavFile;
+    bool repeat;
+    CircBuff<complex> circBuff;
+    WavObject wavObject;
+
+    // Used for wav.mm, not needed anymore
+/*    complex* tempBufferWavFile;
     struct
     {
         long n;
@@ -25,20 +32,27 @@ class AudioObj {
         int channels;
     }wavFileData;
     unsigned int currentTrackerPosition;
-    
     void loadWavFile (void);
-    bool repeat;
-    CircBuff<complex> circBuff;
+ */
     
 public:
 
 	//Creates a new audio object at the world's origin, {0,0,0}.
-    AudioObj() : active(false), volume(1), repeat(true), circBuff(8192) {/*tempBufferWavFile = new complex[100000]; if(!tempBufferWavFile) throw bad_alloc ();*/ loadWavFile(); circBuff.write(tempBufferWavFile, 8192); }
+    AudioObj(const std::string wavFileName) : active(false), volume(1), repeat(true), circBuff(BUFFER_CAPACITY), wavObject(BUFFER_CAPACITY, wavFileName) {
+        wavObject.loadMoreData(32768);
+        circBuff.write(wavObject.complexTempData, 32768);
+        /*tempBufferWavFile = new complex[100000]; if(!tempBufferWavFile) throw bad_alloc ();*/
+        //loadWavFile();
+        //circBuff.write(tempBufferWavFile, 65536);
+    }
 
 	//Creates a new audio object at the location specified by the parameter.
-    AudioObj(const Location& loc, const Velocity& vel) : location(loc), velocity(vel), active(false), volume(1), repeat(true), circBuff(8192) {/*tempBufferWavFile = new complex[100000]; if(!tempBufferWavFile) throw bad_alloc ();*/ loadWavFile();  circBuff.write(tempBufferWavFile, 10000);}
+    AudioObj(const Location& loc, const Velocity& vel, const std::string wavFileName) : location(loc), velocity(vel), active(false), volume(1), repeat(true), circBuff(BUFFER_CAPACITY), wavObject(BUFFER_CAPACITY, wavFileName) {
+        wavObject.loadMoreData(32768);
+        circBuff.write(wavObject.complexTempData, 32768);
+    }
     
-    ~AudioObj () { delete[] tempBufferWavFile;}
+    ~AudioObj () { }//delete[] tempBufferWavFile;}
 	
 	//Returns the array of the object's location.
 	Location getLocation() const;
