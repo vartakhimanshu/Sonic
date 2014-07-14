@@ -45,16 +45,16 @@ static OSStatus playbackCallback (void *inRefCon, AudioUnitRenderActionFlags *io
     //    std::cout<<"\naksjdhka " << ioData->mBuffers[i].mDataByteSize <<" i=" << i <<" "<<inBusNumber;
     //
     //}
-    
-    mixer3D->mix((short *)ioData->mBuffers[0].mData, (short *) ioData->mBuffers[1].mData);
+    mixer3D->overlapConvolution(-30, 0, (short *)ioData->mBuffers[0].mData, (short *) ioData->mBuffers[1].mData);
+    //mixer3D->mix((short *)ioData->mBuffers[0].mData, (short *) ioData->mBuffers[1].mData);
     return noErr;
 }
 
 void CustomAudioUnit::init () {
 	
 	//myWorld.addAudioObj("1minutetest.wav");
-    myWorld.addAudioObj("3m40stest.wav");
-    //myWorld.addAudioObj("input1mono.wav");
+    //myWorld.addAudioObj("3m40stest.wav");
+    myWorld.addAudioObj("input1mono.wav");
     int bufferSize = 512;
     int bitDepth = 16;
     mixer3D = new Mixer3D(bufferSize, 44100, bitDepth, &myWorld);
@@ -153,16 +153,16 @@ CustomAudioUnit::~CustomAudioUnit() {
 }
 
 void CustomAudioUnit::play() {
-    init();
-    AudioOutputUnitStart(audioUnitInstance);
+    //init();
     myWorld.createWriteThread();
+    AudioOutputUnitStart(audioUnitInstance);
     std::cout<<"\nPlay";
 }
 
 void CustomAudioUnit::stop() {
     AudioOutputUnitStop(audioUnitInstance);
-    AudioUnitUninitialize(audioUnitInstance);
-    AudioComponentInstanceDispose(audioUnitInstance);
+    //AudioUnitUninitialize(audioUnitInstance);
+    //AudioComponentInstanceDispose(audioUnitInstance);
     std::cout<<"\nStop";
 }
 

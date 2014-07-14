@@ -69,7 +69,6 @@ size_t CircBuff<T>::write(T *dataPtr, size_t samples)
     //writing to buffer
     
     if (samples_to_write <= capacity - _endIndex) {
-        cout<<"normal in circBuffer"<<std::endl;
         //size_t num = sf_read_int(sf, _data + _endIndex, samples_to_write);
         for(int i = 0; i < samples_to_write; i++) {
             _data[_endIndex+i] = dataPtr[i];

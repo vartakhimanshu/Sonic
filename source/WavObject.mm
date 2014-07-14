@@ -223,6 +223,7 @@ void WavObject::extractWavHeader(const std::string fname) {
         //std::cout<<"no. of channels : "<<wave_format.numChannels<<std::endl;
         wavFileData.bitDepth = wave_format.bitsPerSample;
         //std::cout<<"bit Depth : "<<wave_format.bitsPerSample<<std::endl;
+        startOfWavData = ftell(soundFile);
     }
     
     catch (std::string error) {
@@ -235,35 +236,81 @@ void WavObject::extractWavHeader(const std::string fname) {
     }
 }
 
-void WavObject::loadMoreData(unsigned int size) {
-    
+void WavObject::loadMoreData(unsigned int size, bool repeat) {
+    /*size_t sizeRead = 0;
+    //int channels = wavFileData.channels;
     if (wavFileData.channels == 1) {
-        if (!fread(shortTempData, sizeof(short), size, soundFile)) {
-            throw ("error loading WAVE data into struct");
+        if (!(sizeRead = fread(shortTempData, sizeof(short), size, soundFile))) {
+            //throw ("error loading WAVE data into struct");
+            fseek(soundFile, startOfWavData, SEEK_SET);
+            sizeRead = fread(shortTempData, sizeof(short), size, soundFile);
         }
         
         //Since it is 16-bit audio, we are going to convert the data into shorts, and rescale to complex floats.
         if(	wave_format.bitsPerSample == 16 )
         {
             short *shortData = (short *) shortTempData;
-            for(int i = 0; i < size ; i++)
+            for(int i = 0; i < sizeRead; i++)
             {
                 complexTempData[i] = shortData[i] / (pow(2, 16) / 2.0);
             }
         }
     } else if (wavFileData.channels == 2) {
-        if (!fread(shortTempData, sizeof(short), 2*size, soundFile)) {
-            throw ("error loading WAVE data into struct");
+        if (!(sizeRead = fread(shortTempData, sizeof(short), 2*size, soundFile))) {
+            //throw ("error loading WAVE data into struct");
+            fseek(soundFile, startOfWavData, SEEK_SET);
+            sizeRead = fread(shortTempData, sizeof(short), 2*size, soundFile);
+            
         }
         
         //Since it is 16-bit audio, we are going to convert the data into shorts, and rescale to complex floats.
         if(	wave_format.bitsPerSample == 16 )
         {
             short *shortData = (short *) shortTempData;
-            for(int i = 0; i < size ; i++)
+            for(int i = 0; i < sizeRead/2 ; i++)
             {
                 complexTempData[i] = shortData[2*i] / (pow(2, 16) / 2.0);
             }
         }
+    }*/
+    if(repeat){
+    size_t sizeRead = 0;
+    int channels = wavFileData.channels;
+    if (!(sizeRead = fread(shortTempData, sizeof(short), size*channels, soundFile))) {
+        fseek(soundFile, startOfWavData, SEEK_SET);
+        sizeRead = fread(shortTempData, sizeof(short), size*channels, soundFile);
     }
+    
+    if(	wave_format.bitsPerSample == 16 )
+    {
+        short *shortData = (short *) shortTempData;
+        for(int i = 0; i < sizeRead/channels ; i++)
+        {
+            complexTempData[i] = shortData[i*channels] / (pow(2, 16) / 2.0);
+        }
+    }
+    }
+    else{
+        size_t sizeRead = 0;
+        int channels = wavFileData.channels;
+        if (!(sizeRead = fread(shortTempData, sizeof(short), size*channels, soundFile))) {
+            throw ("error loading WAVE data into struct");
+            //fseek(soundFile, startOfWavData, SEEK_SET);
+            //sizeRead = fread(shortTempData, sizeof(short), size*channels, soundFile);
+        }
+        
+        if(	wave_format.bitsPerSample == 16 )
+        {
+            short *shortData = (short *) shortTempData;
+            for(int i = 0; i < sizeRead/channels ; i++)
+            {
+                complexTempData[i] = shortData[i*channels] / (pow(2, 16) / 2.0);
+            }
+        }
+
+        
+    }
+    
+    
+    
 }

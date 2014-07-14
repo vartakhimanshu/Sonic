@@ -32,7 +32,7 @@ void * World::writeAudioObjects (void* obj) {
         for (int i=0; i < size ; i++){
             (*objListCurrent)[i]->writeCircBuff();
         }
-        usleep(1000000);
+        usleep(100000);
     }
     return NULL;
 }

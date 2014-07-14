@@ -81,6 +81,7 @@ void AudioObj::fillAudioData (complex* target, unsigned int length) {
 
 void AudioObj::fillAudioData (complex* target, unsigned int length) {
     //cout<<"read size remaining, length"<<circBuff.readSizeRemaining()<<","<<length<<endl;
+    //std::cout<< "In fillAudioData"<<endl;
     circBuff.read(target, length);
 }
 
@@ -88,8 +89,8 @@ void AudioObj::writeCircBuff() {
     
     unsigned int length = circBuff.writeSizeRemaining();
     if(length>16384) {
-        cout<<"In write circ Buff : "<<length<<endl;
-        wavObject.loadMoreData(length);
+        //cout<<"In write circ Buff : "<<length<<endl;
+        wavObject.loadMoreData(length, repeat);
         circBuff.write(wavObject.complexTempData, length);
     }
     
