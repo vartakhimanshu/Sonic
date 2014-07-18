@@ -5,7 +5,7 @@
 //  Created by Philadelphia Game Lab on 6/11/14.
 //  Copyright (c) 2014 Philadelphia Game Lab. All rights reserved.
 //
-
+#include <time.h>
 #include "CustomAudioUnit.h"
 
 static OSStatus recordingCallback (void *inRefCon, AudioUnitRenderActionFlags *ioActionFlags, const AudioTimeStamp *inTimeStamp, UInt32 inBusNumber, UInt32 inNumberFrames, AudioBufferList *ioData) {
@@ -45,7 +45,14 @@ static OSStatus playbackCallback (void *inRefCon, AudioUnitRenderActionFlags *io
     //    std::cout<<"\naksjdhka " << ioData->mBuffers[i].mDataByteSize <<" i=" << i <<" "<<inBusNumber;
     //
     //}
-    mixer3D->overlapConvolution(-30, 0, (short *)ioData->mBuffers[0].mData, (short *) ioData->mBuffers[1].mData);
+    
+    clock_t t1, t2;
+    t1 = clock();
+    mixer3D->overlapConvolution(0, (short *)ioData->mBuffers[0].mData, (short *) ioData->mBuffers[1].mData);
+    t2 = clock();
+    cout << (double)(t2-t1) / CLOCKS_PER_SEC << " seconds." << endl;
+    //int s = ((short *)ioData->mBuffers[0].mData)[30];
+    //cout<<s<<endl;
     //mixer3D->mix((short *)ioData->mBuffers[0].mData, (short *) ioData->mBuffers[1].mData);
     return noErr;
 }
@@ -53,12 +60,11 @@ static OSStatus playbackCallback (void *inRefCon, AudioUnitRenderActionFlags *io
 void CustomAudioUnit::init () {
 	
 	//myWorld.addAudioObj("1minutetest.wav");
-    //myWorld.addAudioObj("3m40stest.wav");
-    myWorld.addAudioObj("input1mono.wav");
+    myWorld.addAudioObj("3m40stest.wav");
+    //myWorld.addAudioObj("input1mono.wav");
     int bufferSize = 512;
     int bitDepth = 16;
     mixer3D = new Mixer3D(bufferSize, 44100, bitDepth, &myWorld);
-    
     
     AudioComponentDescription desc;
     

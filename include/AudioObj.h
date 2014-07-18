@@ -39,7 +39,7 @@ public:
 
 	//Creates a new audio object at the world's origin, {0,0,0}.
     AudioObj(const std::string wavFileName) : active(false), volume(1), repeat(true), circBuff(BUFFER_CAPACITY), wavObject(BUFFER_CAPACITY, wavFileName) {
-        wavObject.loadMoreData(32768);
+        wavObject.loadMoreData(32768, repeat);
         circBuff.write(wavObject.complexTempData, 32768);
         /*tempBufferWavFile = new complex[100000]; if(!tempBufferWavFile) throw bad_alloc ();*/
         //loadWavFile();
@@ -48,7 +48,7 @@ public:
 
 	//Creates a new audio object at the location specified by the parameter.
     AudioObj(const Location& loc, const Velocity& vel, const std::string wavFileName) : location(loc), velocity(vel), active(false), volume(1), repeat(true), circBuff(BUFFER_CAPACITY), wavObject(BUFFER_CAPACITY, wavFileName) {
-        wavObject.loadMoreData(32768);
+        wavObject.loadMoreData(32768, repeat);
         circBuff.write(wavObject.complexTempData, 32768);
     }
     

@@ -31,7 +31,7 @@ public:
 
 	void convolution(complex *input, complex *filter, complex *output, long nSig, long nFil, long nFFT);
 	void stereoConvolution(complex *input, complex *leftFilter, complex *rightFilter, complex *leftOutput, complex *rightOutput, long nSig, long nFil, long nFFT);
-	void overlapConvolution(int Azimuth, int elevation, short *ioDataLeft,short *ioDataRight);
+	void overlapConvolution(int elevation, short *ioDataLeft,short *ioDataRight);
 	void stereoTest();
 
 	complex *getLeftFilter();
@@ -39,45 +39,33 @@ public:
 	{
 		return cbResult;
 	}
-	void test()
-	{
-		int AzimuthTemp = 0;
-		int Elevation = -10;
-		for (int i = 0; i < 64*bufferSize; i++)
-		{
-			inputTemp[0][i] = input[0][i];
-		}
-
-		string s = "orignal.txt";
-		ofstream outputFile(s.c_str());
-
-		if (outputFile.is_open())
-		{
-			for (int i = 0; i < 64 * bufferSize; i++)
-			{
-				outputFile << inputTemp[0][i].re() << endl;
-			}
-			outputFile.close();
-		}
-
-		complex *filter = new complex[64 * bufferSize];
-		nTaps = HRTFLoading(&AzimuthTemp, &Elevation, 44100, 1, clFil, crFil);
-		stereoConvolution(inputTemp[0], clFil, crFil, outputLeft[0], outputRight[0], 64 * bufferSize, 1, 64 * bufferSize);
-		for (int i = 0; i < 64 * bufferSize; i++)
-		{
-			cbResult[i] = outputLeft[0][i].re();
-		}
-
-	}
+    
+    ~Mixer3D()
+    {
+        delete [] outputLeft;
+        delete [] outputRight;
+        delete [] overlapLeft;
+        delete [] overlapRight;
+        delete [] overlapInput;
+        delete [] inputTempTemp1;
+        delete [] lFil;
+        delete [] rFil;
+        delete [] clFil;
+        delete [] crFil;
+        delete [] clFilPast;
+        delete myWorld;
+    }
 
 private:
 	//It is named 
 	World *myWorld;
 	
 	//clFil stands for complex type left filter, left and right means the left and right channel
-	complex **input, **outputLeft, **outputRight, *clFil, *crFil;
+	complex /***input*/ **outputLeft, **outputRight, *clFil, *crFil;
+    
+    complex *clFilPast;//Used to store the filter belonging to the last iteration
 	
-	complex **inputTemp;//This is the variable used to store the data gotten from the world
+	//complex **inputTemp;//This is the variable used to store the data gotten from the world
 	complex	*inputTempTemp1;//just define it temporarily to store a small chunk of the input for processing
 	
 	//overlap stores the data chunk which needs to add up with the next chunk of data
@@ -85,19 +73,23 @@ private:
 	complex **overlapLeft,**overlapRight;//This is overlap result coming out of the filters
 	complex *overlapInput;//This is the input which is used for going through the filter for the overlap
 
-	AudioObj **AOList;//This will not be necessary anymore after the code merging
+	//AudioObj **AOList;//This will not be necessary anymore after the code merging
 
 	short *lFil, *rFil;//left and right filter
+    
+    
 	long *cbResult;
 
 	//store the output for small bufferSize
-	long *cbResultSmall;
+	//long *cbResultSmall;
 	
 	//nTaps represents the size of the filter data, *begin and *end are the arrays 
 	//which store the beginning and ending point of the data which is read in every time. 
 	long bufferSize, sampleRate, bitDepth,nTaps, dataSize;
-	
+    int Azimuth;
 
+    bool azimuthFlag,filterFlag;
+    
 	long maxTemp=0;
 
 	int nObj;

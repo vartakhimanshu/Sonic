@@ -75,5 +75,7 @@ float Player::getAzimuth (AudioObj* obj) const {
 //float *Player<T,V>::getOrientation(AudioObj<T,V> * obj) const;
 
 float Player::getRelativeVolume (AudioObj* obj) const{
-    return obj->getVolume() * (1.0 / pow(this->getRadius(obj), 2)) ;
+    if (getRadius(obj) <=1){
+        return obj->getVolume();
+    } return obj->getVolume() * (1.0 / pow(this->getRadius(obj), 2)) ;
 }
