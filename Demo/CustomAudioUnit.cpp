@@ -63,15 +63,15 @@ void CustomAudioUnit::init () {
     srand(time(0));
 	
 	//myWorld.addAudioObj("1minutetest.wav", 150, 0);
-    myWorld.addAudioObj("3m40stest.wav", -90, 0);
-    myWorld.addAudioObj("input1mono.wav", 90, 0);
+    myWorld.addAudioObj("3m40stest.wav", 0, 0);
+    //myWorld.addAudioObj("input1mono.wav", 90, 0);
     //myWorld.addAudioObj("beargrowl.wav", 30, 0);
     //myWorld.addAudioObj("catmeow.wav", 30, 0);
     //myWorld.addAudioObj("applauselight.wav", 30, 0);
     //myWorld.addAudioObj("catscreech.wav", 30, 0);
     //myWorld.addAudioObj("ghomono.wav", 90, 0);
     //myWorld.addAudioObj("zipper_1+2_mono.wav", 30, 0);
-    myWorld.getAudioObj(0).randomVolume();
+    myWorld.getAudioObj(0)->randomVolume();
     
     
     int bufferSize = 512;

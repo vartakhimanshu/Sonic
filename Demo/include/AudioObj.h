@@ -56,6 +56,7 @@ public:
     
     AudioObj(const std::string wavFileName, int Azi, int ele):active(false), volume(1), repeat(true), circBuff(BUFFER_CAPACITY), wavObject(BUFFER_CAPACITY, wavFileName), Azimuth(Azi), elevation(ele)
     {
+        wavObject.volume = 1.0;
         wavObject.loadMoreData(32768, repeat);
         circBuff.write(wavObject.complexTempData, 32768);
         
