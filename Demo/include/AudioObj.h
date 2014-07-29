@@ -2,6 +2,7 @@
 #define AUDIOOBJ_H
 
 #include <stdexcept>
+#include <cstdlib>
 #include "location.h"
 #include "velocity.h"
 #include "complex.h"
@@ -87,6 +88,9 @@ public:
     
     //Sets the volume of the audio object. This will only accept values from 0 to 1.
 	void setVolume(float vol);
+
+    //Set random volume for the audio object 7/29 HLV
+    void randomVolume();
 
 	//Returns whether or not the object is active
 	bool isActive() const;

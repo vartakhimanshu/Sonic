@@ -59,6 +59,8 @@ static OSStatus playbackCallback (void *inRefCon, AudioUnitRenderActionFlags *io
 }
 
 void CustomAudioUnit::init () {
+
+    srand(time(0));
 	
 	//myWorld.addAudioObj("1minutetest.wav", 150, 0);
     myWorld.addAudioObj("3m40stest.wav", -90, 0);
@@ -69,6 +71,7 @@ void CustomAudioUnit::init () {
     //myWorld.addAudioObj("catscreech.wav", 30, 0);
     //myWorld.addAudioObj("ghomono.wav", 90, 0);
     //myWorld.addAudioObj("zipper_1+2_mono.wav", 30, 0);
+    myWorld.getAudioObj(0).randomVolume();
     
     
     int bufferSize = 512;

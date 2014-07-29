@@ -66,6 +66,8 @@ public:
     
     short *shortTempData;
     complex *complexTempData;
+
+    float volume;//volume mutiplier for audio written 7/29 HLV
     
     
     WavObject (unsigned int size,const std::string wavFileName) : shortTempData(new short[size]), complexTempData(new complex[size]) {

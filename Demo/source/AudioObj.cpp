@@ -36,6 +36,14 @@ void AudioObj::setVolume(float vol) {
     this->volume = vol;
 }
 
+void AudioObj::randomVolume() {
+    float rndNum = rand() % 100 + 1;
+    this->volume = rndNum/100.0;
+    wavObject.volume = rndNum/100.0;
+    std::cout<<"Audio Object random volume:"<<volume<<endl;
+
+}
+
 bool AudioObj::isActive() const {
     return this->active;
 }
