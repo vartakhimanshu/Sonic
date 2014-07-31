@@ -163,21 +163,32 @@ void WavObject::loadMoreData(unsigned int size, bool repeat) {
         }
     }*/
     if(repeat){
-    size_t sizeRead = 0;
-    int channels = wavFileData.channels;
-    if (!(sizeRead = fread(shortTempData, sizeof(short), size*channels, soundFile))) {
-        fseek(soundFile, startOfWavData, SEEK_SET);
-        sizeRead = fread(shortTempData, sizeof(short), size*channels, soundFile);
-    }
-    
-    if(	wave_format.bitsPerSample == 16 )
-    {
-        short *shortData = (short *) shortTempData;
-        for(int i = 0; i < sizeRead/channels ; i++)
+        size_t sizeRead = 0;
+        int channels = wavFileData.channels;
+        
+        if(	wave_format.bitsPerSample == 16 )
         {
-            complexTempData[i] = volume * shortData[i*channels] / (pow(2, 16) / 2.0);
+            if (!(sizeRead = fread(shortTempData, sizeof(short), size*channels, soundFile))) {
+                fseek(soundFile, startOfWavData, SEEK_SET);
+                sizeRead = fread(shortTempData, sizeof(short), size*channels, soundFile);
+            }
+            short *shortData = (short *) shortTempData;
+            for(int i = 0; i < sizeRead/channels ; i++)
+            {
+                complexTempData[i] = volume * shortData[i*channels] / (pow(2, 16) / 2.0);
+            }
+        }else if(	wave_format.bitsPerSample == 8 )
+        {
+            if (!(sizeRead = fread(shortTempData, sizeof(char), size*channels, soundFile))) {
+                fseek(soundFile, startOfWavData, SEEK_SET);
+                sizeRead = fread(shortTempData, sizeof(char), size*channels, soundFile);
+            }
+            char *charData = (char *) shortTempData;
+            for(int i = 0; i < sizeRead/channels ; i++)
+            {
+                complexTempData[i] = volume * abs(charData[i*channels]) / pow(2, 7);
+            }
         }
-    }
     }
     else{
         size_t sizeRead = 0;
