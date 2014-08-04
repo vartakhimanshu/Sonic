@@ -65,6 +65,7 @@ public:
     CHUNK_ID chunk_id;
     
     short *shortTempData;
+    char *charTempData;
     complex *complexTempData;
 
     float volume;//volume mutiplier for audio written 7/29 HLV
@@ -73,7 +74,11 @@ public:
     WavObject (unsigned int size,const std::string wavFileName) : shortTempData(new short[size]), complexTempData(new complex[size]) {
         extractWavHeader(wavFileName);
     }
-    
+
+    // Test for Char
+    WavObject (unsigned int size,const std::string wavFileName, unsigned int sizeChar) : shortTempData(new short[size]), complexTempData(new complex[size]), charTempData(new char[sizeChar]) {
+        extractWavHeader(wavFileName);
+    }
     complex *loadCmpWavData(const std::string fname, long *size, int *smpFreq, int *bitDepth, int *channels);
     void extractWavHeader (const std::string fname);
     void loadMoreData (unsigned int, bool);

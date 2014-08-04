@@ -96,6 +96,7 @@ void WavObject::extractWavHeader(const std::string fname) {
                 data = true;
                 fread(&wave_data, sizeof(WAVE_Data), 1, soundFile);
                 startOfWavData = ftell(soundFile);
+                
                 fseek(soundFile, wave_data.subChunk2Size, SEEK_CUR);
                 endOfWavData = ftell(soundFile);
             }
@@ -175,18 +176,27 @@ void WavObject::loadMoreData(unsigned int size, bool repeat) {
             short *shortData = (short *) shortTempData;
             for(int i = 0; i < sizeRead/channels ; i++)
             {
+                if(i > 200 && i < 250){
+                    std::cout << shortTempData[i] << std::endl;
+                }
                 complexTempData[i] = volume * shortData[i*channels] / (pow(2, 16) / 2.0);
             }
         }else if(	wave_format.bitsPerSample == 8 )
         {
-            if (!(sizeRead = fread(shortTempData, sizeof(char), size*channels, soundFile))) {
+            if (!(sizeRead = fread(charTempData, sizeof(char), size*channels, soundFile))) {
                 fseek(soundFile, startOfWavData, SEEK_SET);
-                sizeRead = fread(shortTempData, sizeof(char), size*channels, soundFile);
+                sizeRead = fread(charTempData, sizeof(char), size*channels, soundFile);
             }
-            char *charData = (char *) shortTempData;
+            char *charData = (char *) charTempData;
+            
+            
             for(int i = 0; i < sizeRead/channels ; i++)
             {
-                complexTempData[i] = volume * abs(charData[i*channels]) / pow(2, 7);
+//                if(i > 2000 && i < 2500){
+                    std::cout << (int) charData[i] << std::endl;
+//                }
+                complexTempData[i] = volume * (charData[i*channels] * charData[i*channels]) / pow(2, 15);
+//                complexTempData[i] = volume * (charData[i*channels] * charData[i*channels]) / pow(2, 15);
             }
         }
     }

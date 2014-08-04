@@ -63,7 +63,7 @@ void CustomAudioUnit::init () {
     srand(time(0));
 	
 	//myWorld.addAudioObj("1minutetest.wav", 150, 0);
-    //myWorld.addAudioObj("3m40stest.wav", 0, 0);
+//    myWorld.addAudioObj("3m40stest.wav", 0, 0);
     myWorld.addAudioObj("desolate.wav", 0, 0);
     //myWorld.addAudioObj("input1mono.wav", 90, 0);
     //myWorld.addAudioObj("beargrowl.wav", 30, 0);
